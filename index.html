@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HB</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #121212;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,12 +19,22 @@
         }
         .container {
             text-align: center;
+            background-color: #212121;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
         h1 {
-            color: #333;
+            color: #fff;
+            margin-bottom: 20px;
         }
         p {
-            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        #verse {
+            font-style: italic;
+            color: #ccc;
         }
     </style>
 </head>
@@ -40,7 +52,7 @@
             document.getElementById('verse').textContent = `${chapterName} ${verse.chapter}:${verse.verse} - ${verse.text}`;
         }
 
-        // Fetch Verse of the Day from Bible.org API using JSONP
+        // Fetch Random Verse of the Day from Bible.org API using JSONP
         function fetchVerse() {
             const script = document.createElement('script');
             script.src = 'https://labs.bible.org/api/?passage=random&type=json&callback=myCallback';
