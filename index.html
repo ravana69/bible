@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Quote from Holy Bible</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Quote from Holy Bible</h1>
+        <p id="verse"></p>
+    </div>
+
+    <script>
+        // Custom callback function
+        function myCallback(data) {
+            const verse = data[0]; // The API returns an array, we take the first verse
+            const chapterName = data[0].bookname;
+            document.getElementById('verse').textContent = `${chapterName} ${verse.chapter}:${verse.verse} - ${verse.text}`;
+        }
+
+        // Fetch Verse of the Day from Bible.org API using JSONP
+        function fetchVerse() {
+            const script = document.createElement('script');
+            script.src = 'https://labs.bible.org/api/?passage=random&type=json&callback=myCallback';
+            document.body.appendChild(script);
+        }
+
+        // Call the fetchVerse function when the page loads
+        window.onload = fetchVerse;
+    </script>
+</body>
+</html>
