@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background-color: #212121;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        #verses {
+            font-style: italic;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        // Custom callback function
+        function myCallback(data) {
+            const verse = data[0]; // The API returns an array, we take the first verse
+            const chapterName = data[0].bookname;
+            const verseText = `${chapterName} ${verse.chapter}:${verse.verse} - ${verse.text}`;
+            const verseElement = document.createElement('p');
+            verseElement.textContent = verseText;
+            document.getElementById('verses').appendChild(verseElement);
+            if (data.length > 1) {
+                fetchVerse(); // Fetch next verse if there are more verses to display
+            }
+        }
+
+        // Fetch Random Verse of the Day from Bible.org API using JSONP
+        function fetchVerse() {
+            const randomSeed = Math.floor(Math.random() * 1000000); // Generate a random seed
+            const script = document.createElement('script');
+            script.src = `https://labs.bible.org/api/?passage=random&type=json&callback=myCallback&seed=${randomSeed}`;
+            document.body.appendChild(script);
+        }
+
+        // Call the fetchVerse function when the page loads
+        window.onload = function() {
+            for (let i = 0; i < 10; i++) {
+                fetchVerse(); // Fetch 10 verses
+            }
+        };
+    </script>
+</body>
+</html>
