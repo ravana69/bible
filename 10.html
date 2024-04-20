@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HB</title>
+    <title>10</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <style>
         body {
@@ -32,6 +32,12 @@
             font-size: 18px;
             line-height: 1.6;
         }
+        .old-testament {
+            color: #ff9800; /* Orange color for Old Testament */
+        }
+        .new-testament {
+            color: #4caf50; /* Green color for New Testament */
+        }
         #verses {
             font-style: italic;
             color: #ccc;
@@ -49,13 +55,32 @@
         function myCallback(data) {
             const verse = data[0]; // The API returns an array, we take the first verse
             const chapterName = data[0].bookname;
+            const testament = getTestament(chapterName);
             const verseText = `${chapterName} ${verse.chapter}:${verse.verse} - ${verse.text}`;
             const verseElement = document.createElement('p');
             verseElement.textContent = verseText;
+            if (testament === 'Old Testament') {
+                verseElement.classList.add('old-testament');
+            } else if (testament === 'New Testament') {
+                verseElement.classList.add('new-testament');
+            }
             document.getElementById('verses').appendChild(verseElement);
             if (data.length > 1) {
                 fetchVerse(); // Fetch next verse if there are more verses to display
             }
+        }
+
+        // Function to determine the testament based on the book name
+        function getTestament(bookName) {
+            // Array of Old Testament books
+            const oldTestamentBooks = [
+                'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel',
+                '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs',
+                'Ecclesiastes', 'Song of Solomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel',
+                'Amos', 'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi'
+            ];
+            // If bookName is in oldTestamentBooks, it's Old Testament; otherwise, it's New Testament
+            return oldTestamentBooks.includes(bookName) ? 'Old Testament' : 'New Testament';
         }
 
         // Fetch Random Verse of the Day from Bible.org API using JSONP
