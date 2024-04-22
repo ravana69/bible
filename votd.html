@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verse of the Day</title>
+    <title>votd</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <style>
         body {
@@ -31,28 +31,113 @@
         p {
             font-size: 18px;
             line-height: 1.6;
+            margin-bottom: 10px;
         }
-        #verse {
+        .testament {
             font-style: italic;
             color: #ccc;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>VOTD</h1>
+        <h1></h1>
         <p id="verse"></p>
+        <p class="testament" id="testament"></p>
     </div>
 
     <script>
         // Custom callback function
         function myCallback(data) {
             const verse = data[0]; // The API returns an array, we take the first verse
-            const chapterName = data[0].bookname;
+            const chapterName = verse.bookname;
+            const testament = getTestament(chapterName);
             document.getElementById('verse').textContent = `${chapterName} ${verse.chapter}:${verse.verse} - ${verse.text}`;
+            document.getElementById('testament').textContent = `(${testament})`;
         }
 
-        // Fetch Verse of the Day from Bible.org API using JSONP
+        // Function to get the testament based on the book name
+        function getTestament(bookName) {
+            // Create a mapping of book names to their respective testaments
+            const testamentMap = {
+                "Genesis": "Old Testament",
+                "Exodus": "Old Testament",
+                "Leviticus": "Old Testament",
+                "Numbers": "Old Testament",
+                "Deuteronomy": "Old Testament",
+                "Joshua": "Old Testament",
+                "Judges": "Old Testament",
+                "Ruth": "Old Testament",
+                "1 Samuel": "Old Testament",
+                "2 Samuel": "Old Testament",
+                "1 Kings": "Old Testament",
+                "2 Kings": "Old Testament",
+                "1 Chronicles": "Old Testament",
+                "2 Chronicles": "Old Testament",
+                "Ezra": "Old Testament",
+                "Nehemiah": "Old Testament",
+                "Esther": "Old Testament",
+                "Job": "Old Testament",
+                "Psalms": "Old Testament",
+                "Proverbs": "Old Testament",
+                "Ecclesiastes": "Old Testament",
+                "Song of Solomon": "Old Testament",
+                "Isaiah": "Old Testament",
+                "Jeremiah": "Old Testament",
+                "Lamentations": "Old Testament",
+                "Ezekiel": "Old Testament",
+                "Daniel": "Old Testament",
+                "Hosea": "Old Testament",
+                "Joel": "Old Testament",
+                "Amos": "Old Testament",
+                "Obadiah": "Old Testament",
+                "Jonah": "Old Testament",
+                "Micah": "Old Testament",
+                "Nahum": "Old Testament",
+                "Habakkuk": "Old Testament",
+                "Zephaniah": "Old Testament",
+                "Haggai": "Old Testament",
+                "Zechariah": "Old Testament",
+                "Malachi": "Old Testament",
+                "Matthew": "New Testament",
+                "Mark": "New Testament",
+                "Luke": "New Testament",
+                "John": "New Testament",
+                "Acts": "New Testament",
+                "Romans": "New Testament",
+                "1 Corinthians": "New Testament",
+                "2 Corinthians": "New Testament",
+                "Galatians": "New Testament",
+                "Ephesians": "New Testament",
+                "Philippians": "New Testament",
+                "Colossians": "New Testament",
+                "1 Thessalonians": "New Testament",
+                "2 Thessalonians": "New Testament",
+                "1 Timothy": "New Testament",
+                "2 Timothy": "New Testament",
+                "Titus": "New Testament",
+                "Philemon": "New Testament",
+                "Hebrews": "New Testament",
+                "James": "New Testament",
+                "1 Peter": "New Testament",
+                "2 Peter": "New Testament",
+                "1 John": "New Testament",
+                "2 John": "New Testament",
+                "3 John": "New Testament",
+                "Jude": "New Testament",
+                "Revelation": "New Testament"
+            };
+
+            // Check if the book name exists in the mapping
+            if (testamentMap.hasOwnProperty(bookName)) {
+                return testamentMap[bookName];
+            } else {
+                return "Unknown"; // Default to "Unknown" if the book name is not found
+            }
+        }
+
+        // Fetch Random Verse of the Day from Bible.org API using JSONP
         function fetchVerse() {
             const script = document.createElement('script');
             script.src = 'https://labs.bible.org/api/?passage=votd&type=json&callback=myCallback';
