@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Bible Audio Player</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #202124;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  #container {
+    text-align: center;
+  }
+  h1 {
+    margin-top: 0;
+  }
+  button {
+    background-color: #1976D2;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  button:hover {
+    background-color: #1565C0;
+  }
+  audio {
+    width: 100%;
+    margin-top: 20px;
+  }
+  p {
+    margin: 10px 0;
+  }
+</style>
+</head>
+<body>
+<div id="container">
+  <h1>RBA</h1>
+  <audio id="audioPlayer" controls>
+    Your browser does not support the audio element.
+  </audio>
+  <p id="bookInfo"></p>
+  <p id="audioInfo"></p>
+  <button onclick="playRandomAudio()">Random</button>
+</div>
+
+<script>
+async function fetchAudioUrls(url) {
+  const response = await fetch(url);
+  const text = await response.text();
+  return text.split('\n').filter(line => line.trim() !== '');
+}
+
+async function playRandomAudio() {
+  const otAudioUrls = await fetchAudioUrls('https://raw.githubusercontent.com/ravana69/bible/main/ot.txt');
+  const ntAudioUrls = await fetchAudioUrls('https://raw.githubusercontent.com/ravana69/bible/main/nt.txt');
+
+  const randomNumber = Math.random();
+  const audioElement = document.getElementById("audioPlayer");
+  const bookInfoElement = document.getElementById("bookInfo");
+  const audioInfoElement = document.getElementById("audioInfo");
+  
+  let audioUrl, bookName, audioName;
+  
+  if (randomNumber < 0.5 && otAudioUrls.length > 0) {
+    const randomIndex = Math.floor(Math.random() * otAudioUrls.length);
+    audioUrl = otAudioUrls[randomIndex];
+    const parts = audioUrl.split('/');
+    audioName = parts[parts.length - 1];
+    bookName = extractBookNameFromUrl(audioUrl);
+    bookInfoElement.textContent = `Book: ${bookName} (Old Testament)`;
+  } else if (ntAudioUrls.length > 0) {
+    const randomIndex = Math.floor(Math.random() * ntAudioUrls.length);
+    audioUrl = ntAudioUrls[randomIndex];
+    const parts = audioUrl.split('/');
+    audioName = parts[parts.length - 1];
+    bookName = extractBookNameFromUrl(audioUrl);
+    bookInfoElement.textContent = `Book: ${bookName} (New Testament)`;
+  } else {
+    alert("No audio available.");
+    return;
+  }
+  
+  audioInfoElement.textContent = `Audio: ${audioName}`;
+  audioElement.src = audioUrl;
+  audioElement.play();
+}
+
+function extractBookNameFromUrl(url) {
+  const parts = url.split('/');
+  const bookPart = parts[parts.length - 2];
+  return decodeURIComponent(bookPart.replace(/_/g, ' '));
+}
+</script>
+</body>
+</html>
